@@ -15,15 +15,6 @@ WORKDIR=/workspace/TRELLIS.2
 mkdir -p "$WORKDIR"
 cd "$WORKDIR"
 
-# Clone repo if not mounted/present
-if [ ! -d .git ]; then
-  echo "Cloning TRELLIS.2 repository..."
-  git clone -b main --recursive https://github.com/microsoft/TRELLIS.2.git tmp_clone
-  shopt -s dotglob nullglob
-  mv tmp_clone/* .
-  rmdir tmp_clone || true
-fi
-
 echo "Repository ready at: $(pwd)"
 
 # Print basic runtime info
@@ -37,9 +28,6 @@ echo "========================================"
 echo "Environment ready!"
 echo "Working directory: $(pwd)"
 echo "========================================"
-
-# Patch app.py to bind to 0.0.0.0, demo gradio app.
-sed -i 's/demo\.launch(css=css, head=head)/demo.launch(css=css, head=head, server_name="0.0.0.0")/' app.py
 
 # run app.py default
 if [ $# -eq 0 ]; then
