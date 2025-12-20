@@ -11,10 +11,6 @@ export PATH="$CUDA_HOME/bin:${PATH}"
 export LD_LIBRARY_PATH="$CUDA_HOME/lib64:${LD_LIBRARY_PATH}"
 export ATTN_BACKEND=${ATTN_BACKEND:-flash-attn}
 
-WORKDIR=/workspace/TRELLIS.2
-mkdir -p "$WORKDIR"
-cd "$WORKDIR"
-
 echo "Repository ready at: $(pwd)"
 
 # Print basic runtime info

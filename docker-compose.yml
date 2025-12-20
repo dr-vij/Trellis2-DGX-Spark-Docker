@@ -5,6 +5,7 @@ services:
     volumes:
       - ./TRELLIS.2:/workspace/TRELLIS.2:ro
       - ./hf_cache:/root/.cache/huggingface
+      - ./triton_cache:/root/.triton
       - ./tmp_files:/workspace/TRELLIS.2/tmp
     ports:
       - "7860:7860"
