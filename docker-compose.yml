@@ -2,11 +2,12 @@ services:
   trellis2:
     build: .
     container_name: trellis2
+    user: "${UID}:${GID}"
     volumes:
-      - ./TRELLIS.2:/workspace/TRELLIS.2:ro
-      - ./hf_cache:/root/.cache/huggingface
-      - ./triton_cache:/root/.triton
-      - ./tmp_files:/workspace/TRELLIS.2/tmp
+      - ./TRELLIS.2:/workspace/TRELLIS.2
+      - ./hf_cache:/workspace/cache/huggingface
+      - ./triton_cache:/workspace/cache/triton
+      - ./torch_cache:/workspace/cache/torch
     ports:
       - "${GRADIO_SERVER_PORT:-7860}:${GRADIO_SERVER_PORT:-7860}"
     deploy:
@@ -24,6 +25,10 @@ services:
       CUDA_HOME: /usr/local/cuda-12.9
       HF_TOKEN: ${HF_TOKEN}
       ATTN_BACKEND: ${ATTN_BACKEND:-flash-attn}
+
+      HF_HOME: /workspace/cache/huggingface
+      TRITON_CACHE_DIR: /workspace/cache/triton
+      TORCH_HOME: /workspace/cache/torch
     env_file:
       - .env
     working_dir: /workspace/TRELLIS.2

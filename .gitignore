@@ -3,6 +3,7 @@ hf_cache/*
 !hf_cache/.gitkeep
 triton_cache/*
 !triton_cache/.gitkeep
+!torch_cache/.gitkeep
 tmp_files/*
 !tmp_files/.gitkeep
 .env
