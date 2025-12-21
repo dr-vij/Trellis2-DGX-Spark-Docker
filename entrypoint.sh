@@ -27,7 +27,7 @@ echo "========================================"
 
 # run app.py default
 if [ $# -eq 0 ]; then
-  python app.py
+  exec python app.py
 else
   exec "$@"
 fi
