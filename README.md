@@ -24,4 +24,13 @@ docker compose up --build
 
 Access: `http://localhost:7860`
 
+### Alternative Apps
+```bash
+# Run texturing app instead of default
+APP_SCRIPT=app_texturing.py docker compose up
+
+# Or set in .env
+echo "APP_SCRIPT=app_texturing.py" >> .env
+```
+
 **Note:** First build takes time (CUDA compilation + model downloads).

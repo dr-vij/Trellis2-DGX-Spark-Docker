@@ -44,11 +44,23 @@ RUN pip install --no-cache-dir -U "huggingface_hub[hf_xet,cli]" psutil packaging
 ENV PIP_PREFER_BINARY=1
 RUN pip install flash_attn==2.7.4.post1 --no-build-isolation
 
+# 1. Uninstall preinstalled binary torchvision
+# 2. Build and install from source for architecture 12.1
+RUN pip uninstall -y torchvision && \
+    git clone --branch main https://github.com/pytorch/vision.git /tmp/torchvision && \
+    cd /tmp/torchvision && \
+    # Install system dependencies for build (if missing)
+    apt-get update && apt-get install -y libpng-dev libjpeg-dev && \
+    # Build: FORCE_CUDA=1 ensures kernel compilation,
+    # --no-build-isolation uses already installed nightly-torch
+    FORCE_CUDA=1 TORCH_CUDA_ARCH_LIST="12.1" pip install --no-build-isolation . && \
+    rm -rf /tmp/torchvision
+
 # Install core Python packages for data processing and visualization
 RUN pip install --no-cache-dir \
     imageio imageio-ffmpeg tqdm easydict opencv-python-headless ninja \
     trimesh transformers gradio==6.0.1 tensorboard pandas lpips zstandard \
-    Pillow kornia timm \
+    Pillow kornia timm==1.0.12 \
     && pip install --no-cache-dir git+https://github.com/EasternJournalist/utils3d.git@9a4eb15e4021b67b12c460c7057d642626897ec8
 
 # Clone repositories with CUDA extensions to a temporary directory
@@ -70,7 +82,7 @@ RUN pip install /tmp/extensions/TRELLIS.2/o-voxel --no-build-isolation
 WORKDIR /workspace/TRELLIS.2
 
 # Argument to force entrypoint layer update (used for debugging the entry script)
-ARG ENTRYPOINT_REV=1
+ARG ENTRYPOINT_REV=0
 
 # Copy and set permissions for the entrypoint script
 COPY entrypoint.sh /entrypoint.sh

@@ -25,9 +25,12 @@ echo "Environment ready!"
 echo "Working directory: $(pwd)"
 echo "========================================"
 
-# run app.py default
+# Determine which app to run
+APP_SCRIPT=${APP_SCRIPT:-app.py}
+
+# Run the specified app or custom command
 if [ $# -eq 0 ]; then
-  exec python app.py
+  exec python "$APP_SCRIPT"
 else
   exec "$@"
 fi
